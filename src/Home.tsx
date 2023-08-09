@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
 
 /** component that renders home page
  *
@@ -9,9 +10,15 @@ function Home() {
         <div className="Home">
             <h1>MOD 6</h1>
             <h3>Rules</h3>
-            <button>
-                <Link to={'/settings'} >Get Started </Link>
-            </button>
+            <Button variant='success'>
+                <Link
+                    to={'/settings'}
+                    style={{ textDecoration: 'none'}}
+                    className='text-light'
+                >
+                    Get Started
+                </Link>
+            </Button>
         </div>
     )
 }

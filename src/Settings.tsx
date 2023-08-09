@@ -1,35 +1,43 @@
 import { useState, ChangeEvent, useEffect, FormEvent } from 'react';
+import Alert from 'react-bootstrap/Alert';
+import Button from 'react-bootstrap/Button';
+import CloseButton from 'react-bootstrap/CloseButton';
 
 /** Component for setting up the Game
  *
  * Prop:
- *  -onSubmit
  *
  * State:
- *  -formData: formData
- *  -alertMsgs: alert Msgs if applicable
+ *  -isLoading: determine if page is loading
+ *  -gameSettings: settings for game {players: [], categories: []}
+ *  -alertMsg: alert Msg if applicable
  *
  * Home --> Settings
  */
 interface GameSettings {
     players: string[]
+    categories: string[]
 }
+
+const DEFAULT_SETTINGS = {
+    players: ['', ''],
+    categories: []
+};
 
 function Settings() {
     const [ isLoading, setIsLoading ] = useState(true);
-    const [gameSettings, setGameSettings] = useState<GameSettings>({
-        players: [ '', '' ]
-    });
+    const [ alertMsg, setAlertMsg ] = useState('');
+    const [gameSettings, setGameSettings] = useState<GameSettings>(DEFAULT_SETTINGS);
 
     useEffect(function updateGameSettings() {
         function getGameSettings() {
             const localStorageSetting = localStorage.getItem('settings') || '';
             console.log("localStorage:", localStorageSetting);
             if (localStorageSetting === '') {
+                localStorage.setItem('settings', JSON.stringify(DEFAULT_SETTINGS));
                 setIsLoading(false);
                 return;
             }
-
             setGameSettings(JSON.parse(localStorageSetting));
             setIsLoading(false);
         }
@@ -37,15 +45,17 @@ function Settings() {
     }, []);
 
     function addPlayer() {
-        setGameSettings({
-            players: [ ...gameSettings.players, '' ]
-        });
+        setGameSettings(setting => ({
+            ...setting,
+            players: [...setting.players, '']
+        }));
     }
 
     function removePlayer(player: number) {
-        setGameSettings({
-            players: gameSettings.players.filter((p,idx) => idx !== player)
-        });
+        setGameSettings(setting => ({
+            ...setting,
+            players: setting.players.filter((s,idx) => idx !== player)
+        }))
     }
 
     function handleChange(evt: ChangeEvent<HTMLInputElement>) {
@@ -64,20 +74,28 @@ function Settings() {
         console.log(gameSettings);
         evt.preventDefault();
         localStorage.setItem('settings', JSON.stringify(gameSettings));
+        setAlertMsg('Settings Saved');
     }
 
     if (isLoading) return (<h1>Loading...</h1>)
 
     return(
         <div className="Settings">
+            {alertMsg.length > 0 && (
+                <Alert
+                    variant='success'
+                >
+                    {alertMsg}
+                </Alert>
+            )}
             <h1>Settings</h1>
-            <button
-                type='button'
-                onClick={addPlayer}
-            >
-                Add Player
-            </button>
             <form onSubmit={handleSubmit}>
+                <Button
+                    variant='success'
+                    type='submit'
+                >
+                    Save Settings
+                </Button>
                 {gameSettings.players.map((player,idx) => (
                     <div key={`player-${idx+1}`}>
                         <label htmlFor={`player-${idx+1}`}>{`Player ${idx+1}:`}</label>
@@ -88,15 +106,18 @@ function Settings() {
                             onChange={handleChange}
                             name={`players`}
                         />
-                        <button
-                            type='button'
+                        <CloseButton
                             onClick={() => removePlayer(idx)}
-                        >
-                            X
-                        </button>
+                        />
                     </div>
                 ))}
-                <button>Save Settings</button>
+                <Button
+                    variant='secondary'
+                    type='button'
+                    onClick={addPlayer}
+                >
+                    +
+                </Button>
             </form>
         </div>
     )
@@ -104,3 +125,4 @@ function Settings() {
 
 export default Settings;
 export type { GameSettings }
+export { DEFAULT_SETTINGS }

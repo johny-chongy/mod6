@@ -18,18 +18,20 @@ class CardApi {
     }
 
     /** Get a new shuffled deck */
-    static async getNewShuffledDeck() {
+    static async getNewShuffledDeckId() {
         const response = await this.request(`new/shuffle`);
-        this.deckId = response.deck_id;
-
-        return response.deck_id;
+        CardApi.deckId = response.deck_id;
+        return CardApi.deckId;
     }
 
     /** Draw a card */
-    static async drawCard() {
-        const response = await this.request(`deckId/draw`);
-
-        return response.cards;
+    static async drawCard(deckId: string) {
+        try {
+            const response = await this.request(`${deckId}/draw`);
+            return response;
+        } catch (err) {
+            console.error(err);
+        }
     }
 }
 
