@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect, FormEvent } from 'react';
+import { useState, ChangeEvent, useEffect, FormEvent, MouseEventHandler } from 'react';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import CloseButton from 'react-bootstrap/CloseButton';
@@ -19,15 +19,15 @@ interface GameSettings {
     categories: string[]
 }
 
-const DEFAULT_SETTINGS = {
-    players: ['', ''],
-    categories: []
+const DEFAULT_SETTINGS: GameSettings = {
+    players: ['Player 1', 'Player 2'],
+    categories: ['', '', '']
 };
 
 function Settings() {
     const [ isLoading, setIsLoading ] = useState(true);
     const [ alertMsg, setAlertMsg ] = useState('');
-    const [gameSettings, setGameSettings] = useState<GameSettings>(DEFAULT_SETTINGS);
+    const [ gameSettings, setGameSettings ] = useState(DEFAULT_SETTINGS);
 
     useEffect(function updateGameSettings() {
         function getGameSettings() {
@@ -44,17 +44,17 @@ function Settings() {
         getGameSettings();
     }, []);
 
-    function addPlayer() {
-        setGameSettings(setting => ({
-            ...setting,
-            players: [...setting.players, '']
+    function addSetting(setting: keyof GameSettings) {
+        setGameSettings(oldSettings => ({
+            ...oldSettings,
+            [setting]: [...oldSettings[setting], '']
         }));
     }
 
-    function removePlayer(player: number) {
-        setGameSettings(setting => ({
-            ...setting,
-            players: setting.players.filter((s,idx) => idx !== player)
+    function removeSetting(setting: keyof GameSettings, index: number) {
+        setGameSettings(oldSettings => ({
+            ...oldSettings,
+            [setting]: oldSettings[setting].filter((s,idx) => idx !== index)
         }))
     }
 
@@ -77,6 +77,11 @@ function Settings() {
         setAlertMsg('Settings Saved');
     }
 
+    function handleReset(): void {
+        setGameSettings(DEFAULT_SETTINGS);
+        setAlertMsg('Settings Reset');
+    }
+
     if (isLoading) return (<h1>Loading...</h1>)
 
     return(
@@ -90,15 +95,11 @@ function Settings() {
             )}
             <h1>Settings</h1>
             <form onSubmit={handleSubmit}>
-                <Button
-                    variant='success'
-                    type='submit'
-                >
-                    Save Settings
-                </Button>
+                <Button variant='success' type='submit'>Save Settings</Button>
+                <Button variant='warning' onClick={() => handleReset()}>Reset Settings</Button>
                 {gameSettings.players.map((player,idx) => (
                     <div key={`player-${idx+1}`}>
-                        <label htmlFor={`player-${idx+1}`}>{`Player ${idx+1}:`}</label>
+                        <label htmlFor={`player-${idx+1}`}>{`${idx+1}.`}</label>
                         <input
                             id={`${idx}`}
                             type='text'
@@ -107,14 +108,38 @@ function Settings() {
                             name={`players`}
                         />
                         <CloseButton
-                            onClick={() => removePlayer(idx)}
+                            onClick={() => removeSetting('players', idx)}
                         />
                     </div>
                 ))}
                 <Button
                     variant='secondary'
                     type='button'
-                    onClick={addPlayer}
+                    onClick={() => addSetting('players')}
+                >
+                    +
+                </Button>
+            </form>
+            <form>
+                {gameSettings.categories.map((category,idx) => (
+                    <div key={`category-${idx+1}`}>
+                        <label htmlFor={`category-${idx+1}`}>{`${idx+1}.`}</label>
+                        <input
+                            id={`${idx}`}
+                            type='text'
+                            value={category}
+                            onChange={handleChange}
+                            name={`categories`}
+                        />
+                        <CloseButton
+                            onClick={() => removeSetting('categories', idx)}
+                        />
+                    </div>
+                ))}
+                <Button
+                    variant='secondary'
+                    type='button'
+                    onClick={() => addSetting('categories')}
                 >
                     +
                 </Button>
