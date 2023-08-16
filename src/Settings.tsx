@@ -2,6 +2,7 @@ import { useState, ChangeEvent, useEffect, FormEvent, MouseEventHandler } from '
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import CloseButton from 'react-bootstrap/CloseButton';
+import { Link } from 'react-router-dom';
 
 /** Component for setting up the Game
  *
@@ -97,6 +98,8 @@ function Settings() {
             <form onSubmit={handleSubmit}>
                 <Button variant='success' type='submit'>Save Settings</Button>
                 <Button variant='warning' onClick={() => handleReset()}>Reset Settings</Button>
+
+                <h3>Players</h3>
                 {gameSettings.players.map((player,idx) => (
                     <div key={`player-${idx+1}`}>
                         <label htmlFor={`player-${idx+1}`}>{`${idx+1}.`}</label>
@@ -120,6 +123,8 @@ function Settings() {
                     +
                 </Button>
             </form>
+
+            <h3>Categories</h3>
             <form>
                 {gameSettings.categories.map((category,idx) => (
                     <div key={`category-${idx+1}`}>
@@ -144,6 +149,18 @@ function Settings() {
                     +
                 </Button>
             </form>
+
+            <Button
+                variant='dark'
+            >
+                <Link
+                    to={'/game'}
+                    style={{ textDecoration: 'none'}}
+                    className='text-light'
+                >
+                    Start Game
+                </Link>
+            </Button>
         </div>
     )
 }
