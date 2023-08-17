@@ -131,10 +131,7 @@ function Settings() {
                 >
                     +
                 </Button>
-            </form>
-
             <h3>Categories</h3>
-            <form>
                 {gameSettings.categories.map((category,idx) => (
                     <div key={`category-${idx+1}`}>
                         <label htmlFor={`category-${idx+1}`}>{`${idx+1}.`}</label>
@@ -158,6 +155,7 @@ function Settings() {
                     +
                 </Button>
             </form>
+
 
             <Button
                 variant='dark'

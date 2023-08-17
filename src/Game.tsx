@@ -67,8 +67,11 @@ function Game() {
         async function startGame() {
             const localGameState = localStorage.getItem('gameState') || '';
             if (localGameState !== '') {
+                const parsedGameState = JSON.parse(localGameState);
+                const remainingStart = parsedGameState.remaining === 0 ? -1 : parsedGameState.remaining;
                 setGameState(state => ({
-                    ...JSON.parse(localGameState)
+                    ...parsedGameState,
+                    remaining: remainingStart
                 }));
                 setIsLoading(false);
             }
