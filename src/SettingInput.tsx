@@ -34,6 +34,7 @@ function SettingInput ({ setting, items, removeSetting, handleChange, addSetting
             ))}
 
             <Button
+                size='sm'
                 variant='secondary'
                 type='button'
                 onClick={() => addSetting(setting)}

@@ -97,7 +97,7 @@ function Settings() {
     if (isLoading) return (<h1>Loading...</h1>)
 
     return(
-        <div className="Settings">
+        <div className="Settings p-2">
             {alertMsg.length > 0 && (
                 <Alert
                     variant='success'
@@ -107,9 +107,9 @@ function Settings() {
             )}
             <h1>Settings</h1>
             <p>Customize your settings before you play.</p>
-            <form onSubmit={handleSubmit}>
-                <Button variant='success' type='submit'>SAVE</Button>
-                <Button variant='warning' onClick={() => handleReset()}>RESET</Button>
+            <form className='p-2' onSubmit={handleSubmit}>
+                <Button className='m-1' variant='success' type='submit'>SAVE</Button>
+                <Button className='m-1' variant='warning' onClick={() => handleReset()}>RESET</Button>
 
                 {gameSettingsKeys.map(setting => (
                     <div key={setting}>

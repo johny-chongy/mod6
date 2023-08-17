@@ -118,11 +118,8 @@ function Game() {
     }
 
 
-    if (isLoading) return (<h1>Loading...</h1>)
+    if (isLoading) return (<div className='Loading'><h1>Loading...</h1></div>)
 
-    console.log('state: ', gameState);
-    console.log('settings: ', gameSettings);
-    console.log('randomCat:', randomCategory);
     return (
         <div className='Game'>
             {alertMsg.length > 0 && (
@@ -133,16 +130,19 @@ function Game() {
                     <div className='GameStateInfo'>
                         {gameState.card.image !== '' && (
                         <div className='GameText'>
-                            <p>{`At bat: ${gameSettings.players[gameState.turn]}`}</p>
-                            <span>Name <b>{`${CARD_VALUES[gameState.card.value]} `}</b></span>
+                            <p>{`Active: ${gameSettings.players[gameState.turn]}`}</p>
+                            <span><b className='fs-1'>{`${CARD_VALUES[gameState.card.value]} `}</b></span>
                             {(gameSettings.categories[randomCategory] !== '' && gameSettings.categories.length > 0) && (
                                 <span>from <b>{`${gameSettings.categories[randomCategory]}`}</b></span>
                             )}
                         </div>
                         )}
                     </div>
-                    <CardDisplay image={gameState.card.image}/>
-                    <Button variant='info' onClick={handleDraw}>Draw Card</Button>
+                    <div className='GameDisplay'>
+                        <CardDisplay image={gameState.card.image}/>
+                        <br />
+                        <Button variant='info' onClick={handleDraw}>DRAW</Button>
+                    </div>
                 </div>
             )}
 
