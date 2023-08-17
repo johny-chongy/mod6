@@ -7,6 +7,7 @@ import CloseButton from 'react-bootstrap/CloseButton';
 import { Link } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
 import SettingInput from './SettingInput';
+import './Settings.css';
 
 /** Component for setting up the Game
  *
