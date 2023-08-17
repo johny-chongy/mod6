@@ -6,6 +6,7 @@ import Container from 'react-bootstrap/Container';
 import CloseButton from 'react-bootstrap/CloseButton';
 import { Link } from 'react-router-dom';
 import Row from 'react-bootstrap/Row';
+import SettingInput from './SettingInput';
 
 /** Component for setting up the Game
  *
@@ -32,6 +33,7 @@ function Settings() {
     const [ isLoading, setIsLoading ] = useState(true);
     const [ alertMsg, setAlertMsg ] = useState('');
     const [ gameSettings, setGameSettings ] = useState(DEFAULT_SETTINGS);
+
     const gameState = localStorage.getItem('gameState') || '';
 
     useEffect(function updateGameSettings() {
@@ -49,6 +51,7 @@ function Settings() {
         getGameSettings();
     }, []);
 
+    const gameSettingsKeys: (keyof GameSettings)[] = Object.keys(gameSettings) as (keyof GameSettings)[];
     function addSetting(setting: keyof GameSettings) {
         setGameSettings(oldSettings => ({
             ...oldSettings,
@@ -103,63 +106,25 @@ function Settings() {
                 </Alert>
             )}
             <h1>Settings</h1>
-            <p>Customize your settings before you start.</p>
+            <p>Customize your settings before you play.</p>
             <form onSubmit={handleSubmit}>
                 <Button variant='success' type='submit'>SAVE</Button>
                 <Button variant='warning' onClick={() => handleReset()}>RESET</Button>
 
-                <h3>Players</h3>
-                {gameSettings.players.map((player,idx) => (
-                    <div key={`player-${idx+1}`}>
-                        <label htmlFor={`player-${idx+1}`}>{`${idx+1}.`}</label>
-                        <input
-                            id={`${idx}`}
-                            type='text'
-                            value={player}
-                            onChange={handleChange}
-                            name={`players`}
-                        />
-                        <CloseButton
-                            onClick={() => removeSetting('players', idx)}
+                {gameSettingsKeys.map(setting => (
+                    <div key={setting}>
+                        <SettingInput
+                            setting={setting}
+                            items={gameSettings[setting]}
+                            removeSetting={removeSetting}
+                            handleChange={handleChange}
+                            addSetting={addSetting}
                         />
                     </div>
                 ))}
-                <Button
-                    variant='secondary'
-                    type='button'
-                    onClick={() => addSetting('players')}
-                >
-                    +
-                </Button>
-            <h3>Categories</h3>
-                {gameSettings.categories.map((category,idx) => (
-                    <div key={`category-${idx+1}`}>
-                        <label htmlFor={`category-${idx+1}`}>{`${idx+1}.`}</label>
-                        <input
-                            id={`${idx}`}
-                            type='text'
-                            value={category}
-                            onChange={handleChange}
-                            name={`categories`}
-                        />
-                        <CloseButton
-                            onClick={() => removeSetting('categories', idx)}
-                        />
-                    </div>
-                ))}
-                <Button
-                    variant='secondary'
-                    type='button'
-                    onClick={() => addSetting('categories')}
-                >
-                    +
-                </Button>
             </form>
 
-
-            <Button
-                variant='dark'
-            >
+            <Button variant='dark'>
                 <Link
                     to={'/game'}
                     style={{ textDecoration: 'none'}}
