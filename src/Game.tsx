@@ -141,7 +141,8 @@ function Game() {
                     <div className='GameDisplay'>
                         <CardDisplay image={gameState.card.image}/>
                         <br />
-                        <Button variant='info' onClick={handleDraw}>DRAW</Button>
+                        <Button className='m-1' variant='outline-dark' onClick={handleDraw}>DRAW</Button>
+                        <Button className='m-1' variant='outline-dark' onClick={handleReset}>RESET</Button>
                     </div>
                 </div>
             )}
@@ -154,7 +155,7 @@ function Game() {
                     {gameState.remaining === -1 && (
                         <p>Let's get started!</p>
                     )}
-                    <Button variant='warning' onClick={handleReset}>New Deck</Button>
+                    <Button variant='outline-dark' onClick={handleReset}>New Deck</Button>
                 </div>
             )}
         </div>

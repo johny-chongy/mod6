@@ -109,8 +109,8 @@ function Settings() {
             <h1>Settings</h1>
             <p>Customize your settings before you play.</p>
             <form className='p-2' onSubmit={handleSubmit}>
-                <Button className='m-1' variant='success' type='submit'>SAVE</Button>
-                <Button className='m-1' variant='warning' onClick={() => handleReset()}>RESET</Button>
+                <Button className='m-1' variant='outline-dark' type='submit'>SAVE</Button>
+                <Button className='m-1' variant='outline-dark' onClick={() => handleReset()}>RESET</Button>
 
                 {gameSettingsKeys.map(setting => (
                     <div key={setting}>
@@ -125,15 +125,7 @@ function Settings() {
                 ))}
             </form>
 
-            <Button variant='dark'>
-                <Link
-                    to={'/game'}
-                    style={{ textDecoration: 'none'}}
-                    className='text-light'
-                >
-                    {gameButtonLabel}
-                </Link>
-            </Button>
+            <Button href='/game' variant='outline-dark'>{gameButtonLabel}</Button>
         </div>
     )
 }

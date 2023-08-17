@@ -24,15 +24,7 @@ function Home() {
                             3. The active player has to name a specific number of items that fit that category. <br />
                             4. Rotate players and repeat steps 2-3 until deck is empty.
                         </p>
-                        <Button variant='success'>
-                            <Link
-                                to={'/settings'}
-                                style={{ textDecoration: 'none'}}
-                                className='text-light'
-                            >
-                                Mod6
-                            </Link>
-                        </Button>
+                        <Button href='/settings' variant='outline-dark'>Mod6</Button>
                     </Col>
                 </Row>
             </Container>

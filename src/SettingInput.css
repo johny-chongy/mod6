@@ -1,0 +1,20 @@
+input {
+    opacity: 75%;
+    width: 20vw;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.adder-button {
+    margin-top: 9px;
+    margin-left: -13px;
+    width: 30px;
+    height: 20px;
+}
+
+.adder-button p{
+    margin-top: -6px;
+}
