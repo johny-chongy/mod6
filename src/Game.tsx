@@ -52,7 +52,7 @@ const DEFAULT_STATE: GameState = {
         'value':'',
         'suit':''
     },
-    remaining: 100
+    remaining: -1
 }
 
 function Game() {
@@ -66,24 +66,12 @@ function Game() {
     useEffect(function retrieveGameState() {
         async function startGame() {
             const localGameState = localStorage.getItem('gameState') || '';
-            if (localGameState === '') {
-                const newDeckId = await CardApi.getNewShuffledDeckId();
+            if (localGameState !== '') {
                 setGameState(state => ({
-                    ...state,
-                    deck: newDeckId
-                }))
-
-                console.log('gameState in useEffect', gameState)
-                localStorage.setItem('gameState', JSON.stringify({
-                    ...gameState,
-                    deck: CardApi.deckId
+                    ...JSON.parse(localGameState)
                 }));
+                setIsLoading(false);
             }
-
-            setIsLoading(false);
-            setGameState(state => ({
-                ...JSON.parse(localGameState)
-            }));
         }
         startGame();
     }, []);
@@ -101,14 +89,15 @@ function Game() {
         console.log('draw: ', gameState.deck)
         const { cards, remaining } = await CardApi.drawCard(gameState.deck);
         const newTurn = (gameState.turn + 1) % gameSettings.players.length;
-
-
-        setGameState( state => ({
-            ...state,
+        const newGameState = {
+            ...gameState,
             card: cards[0],
             turn: newTurn,
             remaining: remaining
-        }));
+        };
+
+        localStorage.setItem('gameState', JSON.stringify(newGameState));
+        setGameState( state => (newGameState) );
 
         setAlertMsg('');
     }
@@ -118,7 +107,8 @@ function Game() {
 
         setGameState( state => ({
             ...DEFAULT_STATE,
-            deck: newDeck
+            deck: newDeck,
+            remaining: 52
         }));
 
         setAlertMsg('New deck shuffled')

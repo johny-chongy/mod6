@@ -29,6 +29,7 @@ function Settings() {
     const [ isLoading, setIsLoading ] = useState(true);
     const [ alertMsg, setAlertMsg ] = useState('');
     const [ gameSettings, setGameSettings ] = useState(DEFAULT_SETTINGS);
+    const gameState = localStorage.getItem('gameState') || '';
 
     useEffect(function updateGameSettings() {
         function getGameSettings() {
@@ -83,6 +84,10 @@ function Settings() {
         setAlertMsg('Settings Reset');
     }
 
+    const gameButtonLabel = (gameState === '' || JSON.parse(gameState).remaining <= 0)
+        ? 'START'
+        : 'RESUME';
+
     if (isLoading) return (<h1>Loading...</h1>)
 
     return(
@@ -95,9 +100,10 @@ function Settings() {
                 </Alert>
             )}
             <h1>Settings</h1>
+            <p>Customize your settings before you start.</p>
             <form onSubmit={handleSubmit}>
-                <Button variant='success' type='submit'>Save Settings</Button>
-                <Button variant='warning' onClick={() => handleReset()}>Reset Settings</Button>
+                <Button variant='success' type='submit'>SAVE</Button>
+                <Button variant='warning' onClick={() => handleReset()}>RESET</Button>
 
                 <h3>Players</h3>
                 {gameSettings.players.map((player,idx) => (
@@ -158,7 +164,7 @@ function Settings() {
                     style={{ textDecoration: 'none'}}
                     className='text-light'
                 >
-                    Start Game
+                    {gameButtonLabel}
                 </Link>
             </Button>
         </div>
