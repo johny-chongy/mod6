@@ -64,6 +64,7 @@ function Game() {
     const randomCategory = Math.floor(Math.random() * (gameSettings.categories.length));
 
     useEffect(function retrieveGameState() {
+        console.log('useEffect');
         async function startGame() {
             const localGameState = localStorage.getItem('gameState') || '';
             if (localGameState !== '') {
@@ -79,6 +80,7 @@ function Game() {
         startGame();
     }, []);
 
+    console.log('states:', gameState, isLoading);
     function retrieveGameSettings() {
         const checkLocalStorage = localStorage.getItem('settings');
 
