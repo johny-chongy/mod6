@@ -76,6 +76,8 @@ function Game() {
                 }));
                 setIsLoading(false);
             }
+
+            setIsLoading(false);
         }
         startGame();
     }, []);
